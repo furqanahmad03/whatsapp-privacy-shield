@@ -1,0 +1,19 @@
+{
+  "name": "whatsapp-privacy-shield",
+  "version": "1.0.0",
+  "description": "A privacy control center for WhatsApp Web — blur or hide the sidebar, chat names, avatars, previews and the chat header on demand.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "icons": "python3 scripts/generate-icons.py"
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "2.7.1",
+    "@types/chrome": "^0.0.287",
+    "typescript": "5.6.3",
+    "vite": "5.4.11"
+  }
+}

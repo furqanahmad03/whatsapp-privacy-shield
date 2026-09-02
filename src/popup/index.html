@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="color-scheme" content="light dark" />
+    <title>WhatsApp Privacy Shield</title>
+    <link rel="stylesheet" href="./popup.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="app-header">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <div class="brand-text">
+            <h1>Privacy Shield</h1>
+            <p>WhatsApp Web control center</p>
+          </div>
+        </div>
+        <label class="master-switch" title="Privacy Mode">
+          <input type="checkbox" id="master-enabled" />
+          <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+        </label>
+      </header>
+
+      <main class="app-body">
+        <section class="card quick-controls">
+          <div class="row two-up">
+            <label class="switch-row compact">
+              <span>Blur Sidebar</span>
+              <span class="switch">
+                <input type="checkbox" id="sidebar-blur-all" />
+                <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+              </span>
+            </label>
+            <label class="switch-row compact">
+              <span>Hide Sidebar</span>
+              <span class="switch">
+                <input type="checkbox" id="sidebar-hidden" />
+                <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+              </span>
+            </label>
+          </div>
+          <div class="row two-up">
+            <button id="blur-everything" class="btn btn-danger" type="button">
+              <span class="btn-icon">◆</span> Blur Everything
+            </button>
+            <button id="restore-snapshot" class="btn btn-ghost" type="button" disabled>
+              ↺ Restore Previous
+            </button>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Sidebar</h2>
+          <label class="checkbox-row">
+            <input type="checkbox" id="sidebar-names" />
+            <span>Chat &amp; Contact Names</span>
+          </label>
+          <label class="checkbox-row">
+            <input type="checkbox" id="sidebar-avatars" />
+            <span>Profile Pictures</span>
+          </label>
+          <label class="checkbox-row">
+            <input type="checkbox" id="sidebar-previews" />
+            <span>Message Previews</span>
+          </label>
+          <label class="checkbox-row subtle">
+            <input type="checkbox" id="sidebar-keep-active" />
+            <span>Keep open chat visible while blurring the rest</span>
+          </label>
+        </section>
+
+        <section class="card">
+          <h2>Opened Chat Header</h2>
+          <label class="checkbox-row emphasis">
+            <input type="checkbox" id="header-blur-all" />
+            <span>Blur Complete Header</span>
+          </label>
+          <div id="header-individual-controls">
+            <label class="checkbox-row">
+              <input type="checkbox" id="header-name" />
+              <span>Chat / Group Name</span>
+            </label>
+            <label class="checkbox-row">
+              <input type="checkbox" id="header-avatar" />
+              <span>Profile Picture</span>
+            </label>
+            <label class="checkbox-row">
+              <input type="checkbox" id="header-status" />
+              <span>Online / Last Seen Status</span>
+            </label>
+            <label class="checkbox-row">
+              <input type="checkbox" id="header-subtitle" />
+              <span>Group Participant Text</span>
+            </label>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Blur Style</h2>
+          <div class="style-grid" id="style-options" role="radiogroup" aria-label="Privacy style">
+            <label class="style-option">
+              <input type="radio" name="style" value="blur" />
+              <span class="style-swatch swatch-blur"></span>
+              <span class="style-label">Standard Blur</span>
+            </label>
+            <label class="style-option">
+              <input type="radio" name="style" value="strong-blur" />
+              <span class="style-swatch swatch-strong-blur"></span>
+              <span class="style-label">Strong Blur</span>
+            </label>
+            <label class="style-option">
+              <input type="radio" name="style" value="frosted" />
+              <span class="style-swatch swatch-frosted"></span>
+              <span class="style-label">Frosted Glass</span>
+            </label>
+            <label class="style-option">
+              <input type="radio" name="style" value="pixelated" />
+              <span class="style-swatch swatch-pixelated"></span>
+              <span class="style-label">Pixelated</span>
+            </label>
+            <label class="style-option">
+              <input type="radio" name="style" value="block" />
+              <span class="style-swatch swatch-block"></span>
+              <span class="style-label">Privacy Block</span>
+            </label>
+            <label class="style-option">
+              <input type="radio" name="style" value="dim" />
+              <span class="style-swatch swatch-dim"></span>
+              <span class="style-label">Dim / Fade</span>
+            </label>
+            <label class="style-option">
+              <input type="radio" name="style" value="hidden" />
+              <span class="style-swatch swatch-hidden"></span>
+              <span class="style-label">Hidden</span>
+            </label>
+          </div>
+        </section>
+
+        <section class="card" id="strength-card">
+          <div class="strength-header">
+            <h2>Blur Strength</h2>
+            <span id="strength-value" class="strength-value">8px</span>
+          </div>
+          <input type="range" id="blur-strength" min="2" max="30" step="1" />
+          <div class="strength-scale"><span>2px</span><span>30px</span></div>
+        </section>
+
+        <details class="card advanced">
+          <summary>Advanced Privacy</summary>
+          <div class="advanced-body">
+            <label class="checkbox-row">
+              <input type="checkbox" id="sidebar-timestamps" />
+              <span>Timestamps</span>
+            </label>
+            <label class="checkbox-row">
+              <input type="checkbox" id="sidebar-unread" />
+              <span>Unread Counters</span>
+            </label>
+            <label class="checkbox-row">
+              <input type="checkbox" id="sidebar-search" />
+              <span>Search Results</span>
+            </label>
+
+            <div class="divider"></div>
+
+            <div class="field-row">
+              <span>Overlay Shape</span>
+              <div class="segmented" id="overlay-shape">
+                <button type="button" class="segment" data-value="rounded">Rounded</button>
+                <button type="button" class="segment" data-value="flat">Flat</button>
+              </div>
+            </div>
+
+            <label class="checkbox-row">
+              <input type="checkbox" id="floating-toggle-enabled" />
+              <span>Show floating quick-toggle on WhatsApp Web</span>
+            </label>
+          </div>
+        </details>
+      </main>
+
+      <footer class="app-footer">
+        <div id="reset-confirm" class="reset-confirm hidden">
+          <span>Reset all settings?</span>
+          <button id="reset-cancel" type="button" class="btn btn-ghost btn-sm">Cancel</button>
+          <button id="reset-confirm-yes" type="button" class="btn btn-danger btn-sm">Yes, reset</button>
+        </div>
+        <button id="reset-settings" class="btn btn-link" type="button">Reset to Defaults</button>
+        <p class="footnote">Runs entirely on-device. No data ever leaves your browser.</p>
+        <p class="developer-credit">
+          Developed by Furqan Ahmad <span aria-hidden="true">·</span> Software &amp; AI Engineer
+          <a href="https://furqanahmad.me/" target="_blank" rel="noopener noreferrer">furqanahmad.me</a>
+        </p>
+      </footer>
+    </div>
+
+    <script type="module" src="./popup.ts"></script>
+  </body>
+</html>
