@@ -67,6 +67,9 @@ export const SELECTORS = {
 
     /** Avatar image or the placeholder-avatar SVG when no photo is set. */
     avatar: [
+      // Disappearing-message chats render the profile picture as a 48px SVG.
+      // The timer badge is a smaller SVG, so this does not target the badge.
+      'svg[width="48"][height="48"]',
       'img[src]:not([data-testid="cell-frame-secondary"] img)',
       'span[data-testid="default-user"]',
     ],
@@ -110,7 +113,11 @@ export const SELECTORS = {
       'header span[dir="auto"][title]:first-of-type',
     ],
 
-    avatar: ['header img', 'header span[data-testid="default-user"]'],
+    avatar: [
+      'header svg[width="40"][height="40"]',
+      'header img',
+      'header span[data-testid="default-user"]',
+    ],
 
     /**
      * WhatsApp reuses a single line under the header name for two different

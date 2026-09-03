@@ -18,7 +18,7 @@ html {
   all: unset;
   position: fixed;
   right: 20px;
-  bottom: 20px;
+  top: 70px;
   z-index: 2147483000;
   display: flex;
   align-items: center;
