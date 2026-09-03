@@ -92,7 +92,7 @@ function applyCssVariables(settings: PrivacySettings): void {
 // ---------------------------------------------------------------------------
 
 let activeChatTrackingEnabled = false
-let delegatedContainer: Element | null = null
+const delegatedContainers = new WeakSet<Element>()
 
 function clearActiveMarker(): void {
   document
@@ -111,48 +111,48 @@ function handleSidebarClick(event: Event): void {
   // A data-testid row may be nested inside an ARIA row. Mark both so the
   // generated fallback selectors cannot blur the active chat through its
   // unmarked outer wrapper.
+  const container = target?.closest(cssAny(SELECTORS.sidebar.container))
   let ancestor = row.parentElement?.closest(cssAny(SELECTORS.sidebar.row))
-  while (ancestor && delegatedContainer?.contains(ancestor)) {
+  while (ancestor && container?.contains(ancestor)) {
     ancestor.setAttribute(SELECTORS.sidebar.activeRowMarker, 'true')
     ancestor = ancestor.parentElement?.closest(cssAny(SELECTORS.sidebar.row)) ?? null
   }
 }
 
 function bindSidebarClickDelegation(): void {
-  const container = document.querySelector(cssAny(SELECTORS.sidebar.container))
-  if (!container || container === delegatedContainer) return
-  delegatedContainer = container
-  container.addEventListener('click', handleSidebarClick, { capture: true })
+  document.querySelectorAll(cssAny(SELECTORS.sidebar.container)).forEach((container) => {
+    if (delegatedContainers.has(container)) return
+    delegatedContainers.add(container)
+    container.addEventListener('click', handleSidebarClick, { capture: true })
+  })
 }
 
 /** Tags the timestamp in each visible chat row. WhatsApp does not expose a
  * stable attribute for it in every rollout, so identify it by its consistent
  * position within the already-scoped sidebar row. */
 function tagSidebarTargets(): void {
-  const container = document.querySelector(cssAny(SELECTORS.sidebar.container))
-  if (!container) return
+  document.querySelectorAll(cssAny(SELECTORS.sidebar.container)).forEach((container) => {
+    container.querySelectorAll(cssAny(SELECTORS.sidebar.row)).forEach((row) => {
+      const rowRect = row.getBoundingClientRect()
+      if (rowRect.width <= 2 || rowRect.height <= 2) return
 
-  const rows = container.querySelectorAll(cssAny(SELECTORS.sidebar.row))
-  rows.forEach((row) => {
-    const rowRect = row.getBoundingClientRect()
-    if (rowRect.width <= 2 || rowRect.height <= 2) return
-
-    const name = row.querySelector(cssAny(SELECTORS.sidebar.name))
-    if (!name) return
-    const nameRect = name.getBoundingClientRect()
-    const timestamp = Array.from(row.querySelectorAll<HTMLElement>('span:not(:has(*)), time'))
-      .filter((candidate) => {
-        const rect = candidate.getBoundingClientRect()
-        const alignedWithName = rect.bottom >= nameRect.top - 2 && rect.top <= nameRect.bottom + 2
-        const inRightColumn = rect.left >= rowRect.left + rowRect.width * 0.65
-        return rect.width > 2 && rect.height > 2 && alignedWithName && inRightColumn
-      })
-      .sort((a, b) => b.getBoundingClientRect().right - a.getBoundingClientRect().right)[0]
-    const previousTimestamp = row.querySelector(`[${SELECTORS.sidebar.timestampMarker}]`)
-    if (previousTimestamp !== timestamp) {
-      previousTimestamp?.removeAttribute(SELECTORS.sidebar.timestampMarker)
-      timestamp?.setAttribute(SELECTORS.sidebar.timestampMarker, 'true')
-    }
+      const name = row.querySelector(cssAny(SELECTORS.sidebar.name))
+      if (!name) return
+      const nameRect = name.getBoundingClientRect()
+      const timestamp = Array.from(row.querySelectorAll<HTMLElement>('span:not(:has(*)), time'))
+        .filter((candidate) => {
+          const rect = candidate.getBoundingClientRect()
+          const alignedWithName = rect.bottom >= nameRect.top - 2 && rect.top <= nameRect.bottom + 2
+          const inRightColumn = rect.left >= rowRect.left + rowRect.width * 0.65
+          return rect.width > 2 && rect.height > 2 && alignedWithName && inRightColumn
+        })
+        .sort((a, b) => b.getBoundingClientRect().right - a.getBoundingClientRect().right)[0]
+      const previousTimestamp = row.querySelector(`[${SELECTORS.sidebar.timestampMarker}]`)
+      if (previousTimestamp !== timestamp) {
+        previousTimestamp?.removeAttribute(SELECTORS.sidebar.timestampMarker)
+        timestamp?.setAttribute(SELECTORS.sidebar.timestampMarker, 'true')
+      }
+    })
   })
 }
 

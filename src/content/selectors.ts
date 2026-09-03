@@ -32,8 +32,14 @@ export const SELECTORS = {
   mainPane: ['#main'],
 
   sidebar: {
-    /** The left column: search box + chat list, scoped so we never touch #main. */
-    container: ['#pane-side', 'div[aria-label="Chat list"]'],
+    /** Normal and drawer-based chat lists, scoped so we never touch #main. */
+    container: [
+      '#side',
+      '#pane-side',
+      '[data-testid="archived-chatlist"]',
+      'div[aria-label="Chat list"]',
+      'div[aria-label="Archived chats"]',
+    ],
 
     /** Search input wrapper, so it can be excluded from "hide sidebar". */
     /** The editable search input itself (not its wrapper), so callers can
@@ -72,6 +78,7 @@ export const SELECTORS = {
       'svg[width="48"][height="48"]',
       'img[src]:not([data-testid="cell-frame-secondary"] img)',
       'span[data-testid="default-user"]',
+      'span[data-testid="default-contact-refreshed"]',
     ],
 
     /** Last-message preview text (second line of the row). */
@@ -86,6 +93,7 @@ export const SELECTORS = {
       '[data-wa-privacy-timestamp]',
       '[data-testid="cell-frame-time"]',
       '[data-testid="cell-frame-timestamp"]',
+      '[data-testid="cell-frame-primary-detail"]',
       'div[data-testid="cell-frame-title"] ~ div span[dir="auto"]:not([title])',
     ],
 
