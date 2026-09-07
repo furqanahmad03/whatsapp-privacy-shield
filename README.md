@@ -21,7 +21,7 @@ The extension works entirely inside your browser. It does not collect, save, or 
 
 ## Install in Chrome
 
-1. Build the project to create the `dist` folder.
+1. Build the project by running `npm run build` to create the `dist` folder.
 2. Open `chrome://extensions` in Chrome.
 3. Enable **Developer mode**.
 4. Select **Load unpacked** and choose the `dist` folder.
